@@ -1,0 +1,67 @@
+<div class="filter-panel" [class.collapsed]="isCollapsed()" id="filter-panel">
+  <div class="panel-header" (click)="toggleCollapse()">
+    <div class="panel-title">
+      <span class="panel-icon">⚙️</span>
+      <span>Filters</span>
+      @if (filterService.activeFilterCount() > 0) {
+        <span class="active-count">{{ filterService.activeFilterCount() }}</span>
+      }
+    </div>
+    <button class="collapse-toggle" [attr.aria-label]="isCollapsed() ? 'Expand filters' : 'Collapse filters'">
+      <span class="chevron" [class.rotated]="isCollapsed()">‹</span>
+    </button>
+  </div>
+
+  @if (!isCollapsed()) {
+    <div class="panel-body">
+      <!-- Category Filters -->
+      <div class="filter-section">
+        <h4 class="section-title">Category</h4>
+        <div class="chip-group">
+          @for (cat of allCategories; track cat) {
+            <button
+              class="chip"
+              [class.active]="isCategoryActive(cat)"
+              (click)="toggleCategory(cat)"
+              [attr.aria-pressed]="isCategoryActive(cat)"
+              [id]="'filter-category-' + cat.toLowerCase()"
+            >
+              <span class="chip-icon">{{ categoryIcons[cat] }}</span>
+              <span class="chip-label">{{ cat }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Severity Filters -->
+      <div class="filter-section">
+        <h4 class="section-title">Severity</h4>
+        <div class="chip-group">
+          @for (sev of allSeverities; track sev) {
+            <button
+              class="chip severity-chip"
+              [class.active]="isSeverityActive(sev)"
+              [style.--chip-color]="severityColors[sev]"
+              (click)="toggleSeverity(sev)"
+              [attr.aria-pressed]="isSeverityActive(sev)"
+              [id]="'filter-severity-' + sev"
+            >
+              <span
+                class="severity-dot"
+                [style.background]="severityColors[sev]"
+              ></span>
+              <span class="chip-label">{{ sev }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Clear All -->
+      @if (filterService.activeFilterCount() > 0) {
+        <button class="clear-btn" (click)="clearAll()" id="filter-clear-all">
+          Reset filters
+        </button>
+      }
+    </div>
+  }
+</div>

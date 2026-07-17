@@ -1,0 +1,53 @@
+<div class="map-wrapper">
+  <div #mapContainer class="map-container"></div>
+
+  <!-- Detail Panel -->
+  @if (selectedIncident(); as incident) {
+    <div class="detail-panel" id="incident-detail-panel">
+      <div class="detail-header">
+        <div class="detail-title-row">
+          <span class="category-icon">{{ getCategoryIcon(incident.category) }}</span>
+          <h3 class="detail-title">{{ incident.title }}</h3>
+        </div>
+        <button class="close-btn" (click)="closeDetail()" aria-label="Close detail panel">
+          ✕
+        </button>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-id">{{ incident.id }}</div>
+
+        <div class="detail-badges">
+          <span class="badge category-badge">{{ incident.category }}</span>
+          <span
+            class="badge severity-badge"
+            [style.background]="getSeverityColor(incident.severity) + '22'"
+            [style.color]="getSeverityColor(incident.severity)"
+            [style.border-color]="getSeverityColor(incident.severity) + '44'"
+          >
+            {{ incident.severity | uppercase }}
+          </span>
+        </div>
+
+        <div class="detail-fields">
+          <div class="field">
+            <span class="field-label">City</span>
+            <span class="field-value">{{ incident.city }}</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Coordinates</span>
+            <span class="field-value">{{ incident.lat.toFixed(5) }}, {{ incident.lng.toFixed(5) }}</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Reported</span>
+            <span class="field-value">{{ formatDate(incident.reportedAt) }}</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Timestamp</span>
+            <span class="field-value timestamp">{{ incident.reportedAt }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

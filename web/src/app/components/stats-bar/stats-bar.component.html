@@ -1,0 +1,63 @@
+<header class="stats-bar" id="stats-bar">
+  <div class="bar-left">
+    <div class="brand">
+      <span class="brand-icon">🗺️</span>
+      <h1 class="brand-title">Incident Map</h1>
+      <span class="live-badge">
+        <span class="live-dot"></span>
+        LIVE
+      </span>
+    </div>
+  </div>
+
+  <div class="bar-center">
+    <div class="stat-group">
+      <div class="stat" id="stat-total">
+        <span class="stat-value">{{ incidentService.severityCounts().total }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat" id="stat-critical">
+        <span class="stat-value" [style.color]="severityColors.critical">{{ incidentService.severityCounts().critical }}</span>
+        <span class="stat-label">Critical</span>
+      </div>
+      <div class="stat" id="stat-high">
+        <span class="stat-value" [style.color]="severityColors.high">{{ incidentService.severityCounts().high }}</span>
+        <span class="stat-label">High</span>
+      </div>
+      <div class="stat" id="stat-medium">
+        <span class="stat-value" [style.color]="severityColors.medium">{{ incidentService.severityCounts().medium }}</span>
+        <span class="stat-label">Medium</span>
+      </div>
+      <div class="stat" id="stat-low">
+        <span class="stat-value" [style.color]="severityColors.low">{{ incidentService.severityCounts().low }}</span>
+        <span class="stat-label">Low</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bar-right">
+    @if (incidentService.newIncidentCount() > 0) {
+      <button class="new-incidents-btn" (click)="onAcknowledge()" id="new-incidents-badge">
+        <span class="new-count">{{ incidentService.newIncidentCount() }}</span>
+        new incident{{ incidentService.newIncidentCount() > 1 ? 's' : '' }}
+      </button>
+    }
+
+    <button
+      class="view-toggle"
+      (click)="onToggleView()"
+      [class.active]="isHeatmapMode()"
+      id="view-mode-toggle"
+      [attr.aria-label]="isHeatmapMode() ? 'Switch to marker view' : 'Switch to heatmap view'"
+    >
+      @if (isHeatmapMode()) {
+        <span class="toggle-icon">📍</span>
+        <span>Markers</span>
+      } @else {
+        <span class="toggle-icon">🌡️</span>
+        <span>Heatmap</span>
+      }
+    </button>
+  </div>
+</header>

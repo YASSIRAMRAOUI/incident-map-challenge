@@ -1,4 +1,26 @@
-<h1>Incident Map — Web</h1>
-<p>Clean shell ready for development.</p>
+<div class="app-shell">
+  <app-stats-bar
+    [isHeatmapMode]="isHeatmapMode"
+    (viewModeToggle)="onToggleViewMode()"
+  />
 
-<router-outlet />
+  <div class="map-area">
+    <app-map />
+    <app-filter-panel />
+
+    @if (incidentService.loadingState() === 'loading') {
+      <app-loading-skeleton />
+    }
+
+    @if (incidentService.loadingState() === 'error') {
+      <app-error-state
+        [message]="incidentService.errorMessage()"
+        (retry)="onRetry()"
+      />
+    }
+
+    @if (incidentService.loadingState() === 'loaded' && incidentService.filteredIncidents().length === 0) {
+      <app-empty-state (resetFilters)="onResetFilters()" />
+    }
+  </div>
+</div>
