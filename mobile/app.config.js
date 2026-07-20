@@ -9,6 +9,7 @@ module.exports = {
       supportsTablet: true
     },
     android: {
+      package: "com.anonymous.incidentmap",
       adaptiveIcon: {
         backgroundColor: "#0f172a"
       },

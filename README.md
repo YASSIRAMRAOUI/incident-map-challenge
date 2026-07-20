@@ -14,10 +14,9 @@ incident-map-challenge/
 
 ## 📋 Prerequisites
 
-Before running the applications:
 - **Node.js**: `v18.0.0` or higher & **npm**
-- **Expo Go App**: Installed on your mobile device (Android / iOS) for testing Mobile
-- **Google Maps API Key**: Required for Android mobile map tile rendering
+- **Expo Go App**: Installed on mobile device (for testing Mobile version on Android/iOS)
+- **Google Maps API Key**: Required for Android mobile map rendering
 
 ---
 
@@ -43,9 +42,25 @@ npx expo start
 
 ---
 
+## 📦 How to Build Standalone Mobile APK (Android)
+
+To generate an installable `.apk` file for Android without needing Expo Go:
+
+```bash
+cd mobile
+
+# Option 1: EAS Cloud Build (Easiest)
+npx eas-cli build -p android --profile preview
+
+# Option 2: Expo CLI Local Build
+npx expo run:android --variant release
+```
+
+---
+
 ## 🔑 Google Maps API Key Setup (Mobile Android)
 
-Android map tile rendering in Expo Go requires a Google Maps API Key.
+Android map rendering requires a Google Maps API Key.
 
 1. Go to **[Google Cloud Console](https://console.cloud.google.com/)** → Create a project.
 2. Under **APIs & Services > Library**, search **Maps SDK for Android** and click **Enable**.
@@ -54,7 +69,7 @@ Android map tile rendering in Expo Go requires a Google Maps API Key.
 ```env
 EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY_HERE
 ```
-*(iOS Apple Maps works automatically out of the box without requiring an API key).*
+*(iOS Apple Maps works automatically out of the box without an API key).*
 
 ---
 
@@ -66,7 +81,7 @@ EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY_HERE
 - **Live Feed**: New incidents stream every 3–8 seconds. Click the top notification badge to acknowledge.
 - **Details**: Click any pin to open full incident details.
 
-### Mobile App (Expo Go)
+### Mobile App (Expo Go or Standalone APK)
 - **Map & List Tabs**: Switch between interactive Morocco map and paginated incident list (50 items/page).
 - **Filter Modal**: Tap the floating **⚙️ Filter** button to filter by Category or Severity.
 - **Details**: Tap any marker or list card to view complete incident metadata.
@@ -81,7 +96,7 @@ EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY_HERE
 | **Map Engine** | MapLibre GL JS (WebGL, GPU clustering) | react-native-maps (Native MapView) |
 | **State Pattern** | Angular Signals + RxJS streams | React Context + `useReducer` (MVI-like) |
 | **Live Stream** | `interval()` simulation stream | `setTimeout()` simulation feed |
-| **Performance** | WebGL source clustering | Dynamic `tracksViewChanges` freezing |
+| **Performance** | WebGL source clustering | `useDeferredValue` + dynamic `tracksViewChanges` |
 | **Documentation** | See [web/README.md](web/README.md) | See [mobile/README.md](mobile/README.md) |
 
 ---
@@ -105,4 +120,4 @@ EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY_HERE
 - [x] Live updates without scroll or map position disruption
 - [x] Loading skeletons, empty state with reset, error state with retry
 - [x] Portrait and landscape support
-- [x] Performance optimizations (`tracksViewChanges`, FlatList pagination, memoization)
+- [x] Performance optimizations (`useDeferredValue`, dynamic marker freezing, FlatList pagination)

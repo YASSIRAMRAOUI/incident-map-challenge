@@ -10,11 +10,11 @@ Before running the mobile app, ensure you have:
 - **Node.js**: `v18.0.0` or higher (tested on Node v22) & **npm**
 - **Expo Go App**: Installed on your mobile phone ([Android Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) / [iOS App Store](https://apps.apple.com/app/expo-go/id982107779))
 - **Network**: Mobile phone and computer connected to the **same Wi-Fi network**
-- **Google Maps API Key**: Required for Android map tile rendering in Expo Go
+- **Google Maps API Key**: Required for Android map tile rendering
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Testing with Expo Go)
 
 ```bash
 cd mobile
@@ -32,9 +32,29 @@ npx expo start
 
 ---
 
+## 📦 How to Build an Standalone Android APK (Expo EAS / CLI)
+
+You can generate a standalone `.apk` file that can be installed directly on any Android phone without needing Expo Go.
+
+### Option 1: Using EAS Cloud Build (Recommended & Easiest)
+```bash
+cd mobile
+npx eas-cli build -p android --profile preview
+```
+- EAS will build the `.apk` in the cloud and return a direct download link for your installable APK file.
+
+### Option 2: Using Local Expo CLI Build
+```bash
+cd mobile
+npx expo run:android --variant release
+```
+- Compiles the standalone release APK directly to `mobile/android/app/build/outputs/apk/release/app-release.apk`.
+
+---
+
 ## 🔑 Google Maps API Key Setup
 
-Android map tiles require a Google Maps API Key to render in Expo Go.
+Android map tiles require a Google Maps API Key to render.
 
 ### How to Get an API Key:
 1. Go to **[Google Cloud Console](https://console.cloud.google.com/)**.
@@ -66,11 +86,11 @@ EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY_HERE
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| **Framework** | Expo SDK 54 (React Native 0.81 / 0.86) | Cross-platform (Android + iOS) from a single codebase, fast testing via Expo Go. |
+| **Framework** | Expo SDK 54 (React Native 0.81 / 0.86) | Cross-platform (Android + iOS) from a single codebase, fast testing via Expo Go & EAS Build. |
 | **Map Engine** | `react-native-maps` | Native map rendering (Google Maps on Android, Apple Maps on iOS). |
 | **Navigation** | React Navigation (Bottom Tabs + Stack) | Industry-standard navigation. Bottom tabs for Map/List, Native Stack for Detail. |
 | **State Management** | React Context + `useReducer` | Unidirectional data flow (MVI-like). Typed actions (`LOAD_SUCCESS`, `TOGGLE_CATEGORY`, `ADD_INCIDENT`). |
-| **60fps Performance** | Dynamic `tracksViewChanges` | Custom `<Marker>` views freeze after 800ms to eliminate layout re-calculations during map panning/zooming. |
+| **60fps Performance** | `useDeferredValue` + `tracksViewChanges` | React 18 concurrent deferred rendering guarantees 0ms filter touch response; dynamic marker tracking freezes after 400ms for 60fps pan/zoom. |
 
 ---
 
