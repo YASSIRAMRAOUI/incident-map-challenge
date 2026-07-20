@@ -49,9 +49,20 @@ export function MapScreen({ navigation }: Props) {
     acknowledgeNew();
   }, [acknowledgeNew]);
 
-  // Limit markers rendered for performance — show first 500
+  const [tracksViewChanges, setTracksViewChanges] = useState(true);
+
+  // Limit markers rendered for performance — show first 300 for buttery smooth map
   const visibleMarkers = useMemo(() => {
-    return filteredIncidents.slice(0, 500);
+    return filteredIncidents.slice(0, 300);
+  }, [filteredIncidents]);
+
+  // Disable tracksViewChanges after rendering to stop layout calculations during pan/zoom
+  React.useEffect(() => {
+    setTracksViewChanges(true);
+    const timer = setTimeout(() => {
+      setTracksViewChanges(false);
+    }, 800);
+    return () => clearTimeout(timer);
   }, [filteredIncidents]);
 
   if (state.loadingState === 'loading') {
@@ -127,7 +138,7 @@ export function MapScreen({ navigation }: Props) {
                 longitude: incident.lng,
               }}
               onPress={() => handleMarkerPress(incident)}
-              tracksViewChanges={false}
+              tracksViewChanges={tracksViewChanges}
             >
               <View
                 style={[

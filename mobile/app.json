@@ -1,4 +1,22 @@
 {
-  "name": "mobile",
-  "displayName": "mobile"
+  "expo": {
+    "name": "Incident Map",
+    "slug": "incident-map",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0f172a"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCjgUCANQ6FxmRVxcmmKTiEwXbVsaYdo8M"
+        }
+      }
+    }
+  }
 }
