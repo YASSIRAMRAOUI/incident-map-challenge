@@ -22,6 +22,10 @@ DerivedData
 *.xcuserstate
 **/.xcode.env.local
 
+# Native generated directories for Expo CNG
+android/
+ios/
+
 # Android/IntelliJ
 #
 build/
