@@ -18,6 +18,11 @@ module.exports = {
           apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || ""
         }
       }
+    },
+    extra: {
+      eas: {
+        projectId: "563d7334-8894-40e5-8316-76ec7a1d2c8d"
+      }
     }
   }
 };
