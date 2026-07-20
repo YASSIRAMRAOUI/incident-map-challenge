@@ -24,7 +24,7 @@ interface Props {
   onClose: () => void;
 }
 
-export function FilterModal({ visible, onClose }: Props) {
+export const FilterModal = React.memo(function FilterModal({ visible, onClose }: Props) {
   const {
     toggleCategory,
     toggleSeverity,
@@ -132,7 +132,7 @@ export function FilterModal({ visible, onClose }: Props) {
       </SafeAreaView>
     </Modal>
   );
-}
+});
 
 const styles = StyleSheet.create({
   overlay: {

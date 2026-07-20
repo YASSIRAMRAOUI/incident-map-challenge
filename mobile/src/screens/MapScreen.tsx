@@ -36,7 +36,6 @@ export function MapScreen({ navigation }: Props) {
 
   const mapRef = useRef<MapView>(null);
   const [filterVisible, setFilterVisible] = useState(false);
-  const [region, setRegion] = useState<Region>(MOROCCO_CENTER);
 
   const handleMarkerPress = useCallback(
     (incident: Incident) => {
@@ -51,19 +50,22 @@ export function MapScreen({ navigation }: Props) {
 
   const [tracksViewChanges, setTracksViewChanges] = useState(true);
 
-  // Limit markers rendered for performance — show first 300 for buttery smooth map
+  // Defer heavy native marker list updates so UI chip taps respond instantly (0ms latency)
+  const deferredIncidents = React.useDeferredValue(filteredIncidents);
+
+  // Limit markers rendered for optimal mobile performance (first 300)
   const visibleMarkers = useMemo(() => {
-    return filteredIncidents.slice(0, 300);
-  }, [filteredIncidents]);
+    return deferredIncidents.slice(0, 300);
+  }, [deferredIncidents]);
 
   // Disable tracksViewChanges after rendering to stop layout calculations during pan/zoom
   React.useEffect(() => {
     setTracksViewChanges(true);
     const timer = setTimeout(() => {
       setTracksViewChanges(false);
-    }, 800);
+    }, 400);
     return () => clearTimeout(timer);
-  }, [filteredIncidents]);
+  }, [deferredIncidents]);
 
   if (state.loadingState === 'loading') {
     return <LoadingSkeleton />;
@@ -126,32 +128,16 @@ export function MapScreen({ navigation }: Props) {
           ref={mapRef}
           style={styles.map}
           initialRegion={MOROCCO_CENTER}
-          onRegionChangeComplete={setRegion}
           userInterfaceStyle="dark"
           mapType="standard"
         >
           {visibleMarkers.map((incident) => (
-            <Marker
+            <IncidentMarker
               key={incident.id}
-              coordinate={{
-                latitude: incident.lat,
-                longitude: incident.lng,
-              }}
-              onPress={() => handleMarkerPress(incident)}
+              incident={incident}
+              onPress={handleMarkerPress}
               tracksViewChanges={tracksViewChanges}
-            >
-              <View
-                style={[
-                  styles.marker,
-                  {
-                    backgroundColor: SEVERITY_COLORS[incident.severity],
-                    width: markerSize(incident.severity),
-                    height: markerSize(incident.severity),
-                    borderRadius: markerSize(incident.severity) / 2,
-                  },
-                ]}
-              />
-            </Marker>
+            />
           ))}
         </MapView>
       )}
@@ -193,6 +179,42 @@ export function MapScreen({ navigation }: Props) {
     </View>
   );
 }
+
+// Memoized individual marker component for 60fps pan/zoom performance
+const IncidentMarker = React.memo(function IncidentMarker({
+  incident,
+  onPress,
+  tracksViewChanges,
+}: {
+  incident: Incident;
+  onPress: (incident: Incident) => void;
+  tracksViewChanges: boolean;
+}) {
+  const size = markerSize(incident.severity);
+  return (
+    <Marker
+      coordinate={{
+        latitude: incident.lat,
+        longitude: incident.lng,
+      }}
+      anchor={{ x: 0.5, y: 0.5 }}
+      onPress={() => onPress(incident)}
+      tracksViewChanges={tracksViewChanges}
+    >
+      <View
+        style={[
+          styles.marker,
+          {
+            backgroundColor: SEVERITY_COLORS[incident.severity],
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+          },
+        ]}
+      />
+    </Marker>
+  );
+});
 
 function markerSize(severity: string): number {
   switch (severity) {
