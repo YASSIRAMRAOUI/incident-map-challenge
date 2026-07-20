@@ -1,5 +1,15 @@
 # 📱 Mobile App (React Native + Expo SDK 54)
 
+## 📋 Prerequisites
+
+Before running the mobile app, ensure you have:
+- **Node.js** (v18.0.0 or higher) & **npm**
+- **Expo Go** app installed on your phone ([Android Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) / [iOS App Store](https://apps.apple.com/app/expo-go/id982107779))
+- Mobile phone and computer connected to the **same Wi-Fi network**
+- **Google Maps API Key** (for Android map tile rendering)
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
@@ -8,10 +18,10 @@ npm install
 npx expo start
 ```
 
-1. Install **Expo Go** on your mobile device (Android / iOS).
-2. Scan the terminal QR code in Expo Go (or Camera on iOS).
+1. Open **Expo Go** on your device.
+2. Scan the terminal QR code in Expo Go (Android) or Camera app (iOS).
 
-> **Note:** Built for **Expo SDK 54**. If phone & PC are on different Wi-Fi networks, run `npx expo start --tunnel`. To clear cache: `npx expo start -c`.
+> **Note:** Built for **Expo SDK 54**. If on separate networks: `npx expo start --tunnel`. To clear cache: `npx expo start -c`.
 
 ---
 

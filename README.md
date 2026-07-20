@@ -11,6 +11,14 @@ incident-map-challenge/
 
 ---
 
+## 📋 Prerequisites
+
+- **Node.js** (v18.0.0 or higher) & **npm**
+- **Expo Go** app on mobile device (for testing Mobile version on Android/iOS)
+- **Google Maps API Key** (required for Android mobile map rendering)
+
+---
+
 ## 🚀 Quick Start Instructions
 
 ### 1. Web Dashboard (Angular)
